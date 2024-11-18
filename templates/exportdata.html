@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block title %}Export Your Data{% endblock %}
+
+{% block content %}
+   <style>
+      /* Add some basic styles for better appearance */
+      .export-form {
+          max-width: 400px;
+          margin: auto;
+          padding: 20px;
+          background-color: #f5f5f5;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .export-form label {
+          display: block;
+          margin-bottom: 8px;
+          color: #333;
+      }
+
+      .export-form select,
+      .export-form input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 12px;
+          box-sizing: border-box;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+      }
+
+      .export-form .custom-date-range {
+          margin-top: 10px;
+      }
+
+      .export-form .submit-button {
+          background-color: #4caf50;
+          color: white;
+          padding: 12px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+      }
+
+      .export-form .submit-button:hover {
+          background-color: #45a049;
+      }
+
+      /* CSV icon and scrolling message styles */
+      .csv-icon {
+          font-size: 24px;
+          color: #4caf50;
+          display: inline-block;
+          margin-right: 8px;
+      }
+
+      .scrolling-message {
+          font-size: 14px;
+          color: #333;
+          animation: scrollMessage 18s linear infinite;
+          white-space: nowrap;
+      }
+
+      @keyframes scrollMessage {
+          0% {
+              transform: translateX(100%);
+          }
+          100% {
+              transform: translateX(-100%);
+          }
+      }
+   </style>
+
+   <h1>Export Your Data to Excel Content</h1>
+
+   <form method="POST" action="{{ url_for('exportdata') }}" class="export-form">
+      <label for="dateRange">Select Date Range:</label>
+      <select name="dateRange" id="dateRange">
+         <option value="1_week">1 Week</option>
+         <option value="1_month">1 Month</option>
+         <option value="1_year">1 Year</option>
+         <option value="custom">Custom Date Range</option>
+      </select>
+
+      <div id="customDateRange" class="custom-date-range" style="display: none;">
+         <label for="startDate">Start Date:</label>
+         <input type="date" name="startDate" id="startDate">
+
+         <label for="endDate">End Date:</label>
+         <input type="date" name="endDate" id="endDate">
+      </div>
+
+      <button type="submit" class="submit-button">Submit</button>
+   </form>
+
+   <div>
+      <span class="csv-icon">&#128193;</span>
+      Data will be sent to your mail in CSV format
+   </div>
+
+   <script>
+    document.getElementById('dateRange').addEventListener('change', function () {
+        var customDateRange = document.getElementById('customDateRange');
+        customDateRange.style.display = this.value === 'custom' ? 'block' : 'none';
+    });
+
+    document.querySelector('.export-form').addEventListener('submit', function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Get the form element
+        var form = event.target;
+        
+        // Send a POST request using fetch API
+        fetch(form.action, {
+            method: form.method,
+            body: new URLSearchParams(new FormData(form))
+        })
+            .then(function (response) {
+                // Print the response
+                console.log(response);
+
+                if (response.ok) {
+                    // Display success alert
+                    alert('You will receive Mail in a short time! Redirecting to the home page...');
+
+                    // Redirect to the home page (replace 'home.html' with your actual home page URL)
+                    window.location.href = '{{ url_for("home") }}';
+                } else {
+                    // Display error alert
+                    alert('Error: Unable to export data. Please try again.');
+                }
+            })
+            .catch(function (error) {
+                // Handle network error
+                console.error('Network error:', error);
+                alert('Error: Unable to export data. Please try again.');
+            });
+    });
+</script>
+
+{% endblock %}

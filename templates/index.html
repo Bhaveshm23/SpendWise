@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to SpendWise</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body style="background: url('{{ url_for('static', filename='css/images/background.png') }}') no-repeat center center fixed; background-size: cover; color: #ffffff; line-height: 1.6;">
+    <header>
+        <div class="container">
+            <h1>SpendWise</h1>
+            <nav>
+                <a href="/signin" class="btn-signin">Sign In / Sign Up</a>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h2>Take Charge of Your Finances</h2>
+            <img src="{{ url_for('static', filename='css/images/logo.png') }}" alt="SpendWise Logo" class="sidebar-logo">
+            <p>Seamlessly scan bills, track expenses, and forecast your financial future.  
+                <br><br><strong>Join SpendWise</strong>  
+                <br>Your partner for smart and efficient expense tracking.</p>
+        </div>
+    </section>
+    
+    
+</body>
+</html>

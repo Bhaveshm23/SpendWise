@@ -1,0 +1,441 @@
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+#sidebar {
+    height: 100%;
+    width: 250px; /* Adjust width as needed */
+    position: fixed;
+    z-index: 2; /* Ensure it's above other content */
+    top: 0;
+    left: 0;
+    background: linear-gradient(to bottom, rgba(35, 53, 54, 1), rgba(35, 53, 54, 0.8));
+    padding-top: 20px;
+    box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+    border-right: 1px solid #ddd; /* Optional right border */
+    transition: width 0.3s ease-in-out; /* Smooth transition for opening/closing */
+}
+
+/* Optional: Style for the main content overlay */
+.content-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 250px; /* Same as the sidebar width */
+    width: calc(100% - 250px);
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1; /* Below the sidebar */
+}
+
+#sidebar h3 {
+    color: #fff;
+    text-align: center;
+}
+
+#sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#sidebar li {
+    padding: 10px;
+    text-align: center;
+}
+
+#sidebar a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #eaecef;
+    display: block;
+    transition: 0.3s;
+}
+
+#sidebar a:hover {
+    color: #1a1a1a;
+}
+
+#content {
+    margin-left: 250px;
+    padding: 16px;
+}
+
+header {
+    background-color: #020202;
+    padding: 0px; /* Header will not be visible*/
+    color: #fff;
+}
+
+@media screen and (max-width: 600px) {
+    #sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    #sidebar ul {
+        padding-top: 15px;
+        text-align: center;
+    }
+
+    #sidebar li {
+        text-align: left;
+    }
+
+    #content {
+        margin-left: 0;
+    }
+}
+
+#sidebar.active {
+    /* Add styles for the open state of the sidebar */
+    /* For example, you can adjust the width or add transitions */
+    width: 250px;
+}
+
+/* Content styles */
+#content.active {
+    /* Add styles for the open state of the content area */
+    /* For example, you can adjust the margin-left or add transitions */
+    margin-left: 250px;
+}
+
+/* Upload Page CSS Elements - tanmay - Additional CSS to style the page */
+#pageContainer {
+    display: flex;
+    gap: 20px; /* Space between the form and image containers */
+}
+
+#formContainer button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: auto; /* Adjust the width as needed */
+    display: block; /* Center the button */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#formContainer div {
+    margin-bottom: 15px;
+}
+
+#formContainer input[type="file"], 
+#formContainer input[type="date"], 
+#formContainer input[type="number"], 
+#formContainer select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#formContainer button {
+    background-color: #4CAF50; /* Green button */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#formContainer button:hover {
+    background-color: #45a049;
+}
+
+#formContainer .clearBtn {
+    background-color: #f44336; /* Red clear button */
+}
+
+#formContainer .clearBtn:hover {
+    background-color: #d32f2f;
+}
+
+#imageContainer {
+    flex: 1;
+    max-width: 400px;
+    max-height: 400px;
+    overflow: auto;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px; /* Added for consistency */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Added for consistency */
+}
+
+#selectedImage {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#uploadStatus, #autofillStatus {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#uploadStatus img, #autofillStatus img {
+    width: 20px;
+    height: 20px;
+}
+
+#fileName {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+/* Additional consistency with home.css */
+#sidebar a, #formContainer button, #formContainer .clearBtn {
+    transition: 0.3s; /* Smooth transition for hover effects */
+}
+
+.section-separator {
+    border: none;
+    height: 1px;
+    background-color: #ccc; /* Light gray color */
+    margin: 20px 0; /* Adjust spacing around the separator */
+}
+
+/* CSS for Analytics Dashboard */
+.analytics-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 15px;
+}
+
+.user-info .user-id {
+    margin-bottom: 1rem;
+}
+
+.percentage-change {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.increase {
+    color: #4caf50; /* Green for increase */
+}
+
+.decrease {
+    color: #f44336; /* Red for decrease */
+}
+
+.no-change {
+    color: #9e9e9e; /* Grey for no change */
+}
+
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.chart {
+    margin-bottom: 30px;
+}
+
+.chart canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.chart-title {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+@media (max-width: 992px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .card .row {
+    align-items: center;
+  }
+  
+  .card .col-auto {
+    display: flex;
+    align-items: center;
+  }
+  
+  .card .col-auto i {
+    font-size: 2.5rem;
+  }
+  
+  .text-primary {
+    background-color: #1a1a1a; /* Match with sidebar color */
+  }
+  
+  .text-success {
+    background-color: #4CAF50; /* Green from your button */
+  }
+  
+  .text-info {
+    background-color: #3A7BD5; /* Just an example, choose your own */
+  }
+  
+  .font-weight-bold {
+    font-weight: bold;
+  }
+  
+  .text-uppercase {
+    text-transform: uppercase;
+  }
+  
+  .text-xs {
+    font-size: 0.75rem;
+  }
+  
+  .text-gray-800 {
+    color: #333; /* Adjust to match your design */
+  }
+
+  /* Adjustments for a more compact layout */
+  .card-body {
+    padding: 0.5rem; /* Reduce padding */
+}
+
+.card {
+    margin-bottom: 1rem; /* Less space between cards */
+}
+
+.chart-title {
+    margin-bottom: 0.5rem; /* Less space above chart title */
+}
+
+/* Responsive font sizes */
+@media (max-width: 768px) {
+    .card-title, .card-text {
+        font-size: smaller; /* Adjust font size for small screens */
+    }
+}
+
+/*Settings Page*/
+
+.settings-page {
+    max-width: 600px;
+    margin: auto;
+}
+
+.profile-photo-section img.profile-photo {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+}
+
+.profile-photo-section input[type="file"] {
+    display: block;
+    margin: auto;
+}
+
+.name-update-section, .email-frequency-section {
+    margin-bottom: 20px;
+}
+
+.name-update-section input, .email-frequency-section select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.save-button-section button {
+    padding: 10px 20px;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-button-section button:hover {
+    background-color: #0056b3;
+}
+
+.profile-photo-section img.profile-photo {
+    max-width: 200px; /* Adjust as needed */
+    height: auto;
+    border-radius: 50%;
+    border: 2px solid #ddd; /* Optional border */
+    display: block;
+    margin: 0 auto;
+}
+
+.profile-photo-section input[type="file"] {
+    display: block;
+    margin: auto;
+}
+
+.profile-photo-container {
+    width: 200px; /* Fixed width */
+    height: 200px; /* Fixed height */
+    border-radius: 50%;
+    overflow: hidden;
+    margin: auto;
+    border: 2px solid #ddd; /* Optional border */
+}
+
+.profile-photo-section img.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the area */
+}
+
+.profile-photo-section input[type="file"] {
+    display: block;
+    margin: auto;
+}
+
+/*Extra*/
+.sidebar-logo {
+    display: block;
+    max-width: 100px; /* Adjust as needed */
+    margin: 0 auto 20px; /* Center the logo in the sidebar */
+}
+
+#top-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa; /* Light grey background, adjust the color as needed */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-photo {
+    width: 40px; /* Adjust as needed */
+    height: 40px; /* Adjust as needed */
+    border-radius: 50%; /* Circular photo */
+    margin-right: 10px;
+    padding-left: 5px;
+}
+
+.username {
+    font-weight: bold;
+}

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SpendWise{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --sidebar-width: 250px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        #sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .sidebar-logo {
+            width: 120px;
+            height: auto;
+            margin: 1rem 0;
+        }
+
+        .list-unstyled {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list-unstyled li {
+            margin: 0.5rem 0;
+        }
+
+        .list-unstyled li a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #4b5563;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .list-unstyled li a:hover {
+            background-color: #f3f4f6;
+            color: var(--primary-color);
+        }
+
+        .list-unstyled li.active a {
+            background-color: #e5e7eb;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        #content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+        }
+
+        #top-bar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            height: 70px;
+            background-color: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .username {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .welcome-section {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .profile-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-top: 1rem;
+        }
+
+        .total-amount-section {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .transactions-table-section {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .user-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #e5e7eb; /* Fallback color while loading */
+        }
+
+        .user-photo.loading {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3 class="text-xl font-bold text-gray-800">SpendWise</h3>
+            <img src="{{ url_for('static', filename='css/images/logo.png') }}" alt="SpendWise Logo" class="sidebar-logo">
+        </div>
+        <ul class="list-unstyled mt-6">
+            <li class="active">
+                <a href="{{ url_for('home') }}" class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('uploadbill') }}" class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                    </svg>
+                    Upload Bill
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('analytics') }}" class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    Analytics
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('exportdata') }}" class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Export Data
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('settings') }}" class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Settings
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('signout') }}" class="flex items-center gap-3 text-red-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="top-bar">
+        <div class="user-info">
+            <span class="username">{{ user_name }}</span>
+            <img src="{{ url_for('static', filename='css/images/default_profile_pic.jpg') }}" 
+                 alt="User Photo" 
+                 id="userPhoto" 
+                 class="user-photo loading"
+                 onerror="this.src='{{ url_for('static', filename='css/images/default_profile_pic.jpg') }}'">
+        </div>
+    </div>
+
+    <div id="content">
+        {% block content %}
+        <div class="welcome-section">
+            <h1 class="text-2xl font-bold text-gray-800">Welcome, {{ user_name }}!</h1>
+        </div>
+
+        <div class="total-amount-section">
+            <h4 class="text-xl font-semibold">Total Amount Spent: ${{ total_amount }}</h4>
+        </div>
+
+        <div class="transactions-table-section">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-xl font-semibold text-gray-800">Transactions</h4>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Date</th>
+                            <th>Total Amount</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction['timestamp'] }}</td>
+                            <td>{{ transaction['date'] }}</td>
+                            <td>${{ transaction['totalAmount'] }}</td>
+                            <td>{{ transaction['category'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userPhoto = document.getElementById('userPhoto');
+            const userId = '{{ user_id }}';
+           
+           // Function to load profile picture
+           async function loadProfilePicture() {
+                try {
+                    const response = await fetch(`/getUserProfilePic/${userId}`);
+                    const data = await response.json();
+                    
+                    if (response.ok && data.exists && data.url) {
+                        userPhoto.src = data.url;
+                    }
+                } catch (error) {
+                    console.error('Error loading profile picture:', error);
+                } finally {
+                    // Remove loading class regardless of outcome
+                    userPhoto.classList.remove('loading');
+                }
+            }
+
+            // Load profile picture when page loads
+            loadProfilePicture();
+        });
+    </script>
+</body>
+</html>

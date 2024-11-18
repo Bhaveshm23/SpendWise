@@ -1,0 +1,119 @@
+html {
+    height: 100%;
+}
+
+/* Reset some basic elements */
+body, h1, h2, p, a {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Apply a box-sizing rule */
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+/* Style the body */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Make sure the body is at least the height of the viewport */
+    margin: 0;
+}
+
+/* Container for content */
+.container {
+    display: flex; /* Use flexbox to layout children horizontally */
+    justify-content: space-between; /* Space between items */
+    align-items: center; /* Align items vertically */
+    width: 85%;
+    margin: auto;
+    overflow: hidden;
+}
+
+header {
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    padding: 20px 0;
+}
+
+header h1 {
+    margin-bottom: 0; /* Remove the margin-bottom from h1 */
+    padding-right: 20px; /* Add some padding to the right of h1 */
+}
+
+nav {
+    margin: 0; /* Reset margin for nav */
+}
+
+.hero {
+    text-align: right; /* Align text to the right */
+    padding: 80px 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1));
+    /* background-color: rgba(0, 0, 0, 0.6); */
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: white(145, 142, 142);
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+
+main {
+    flex: 1; /* Allows main content to grow and shrink as needed */
+    /* Other styles for main */
+}
+
+footer {
+    background: #333333;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+    /* Add the following to ensure footer is at the bottom */
+    margin-top: auto; /* Push the footer to the bottom */
+}
+
+.btn-signin {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Adjust button color as needed */
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    /* Additional styles */
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-signin:hover, .btn-getstarted:hover {
+    background-color: #367c39;
+}
+
+@media only screen and (max-width: 600px) {
+    header h1, .hero h2 {
+        font-size: 2rem;
+    }
+    .hero p, .btn-signin, .btn-getstarted {
+        font-size: 1rem;
+    }
+}
+
+nav .btn-signin {
+    padding: 10px 20px;
+    text-decoration: none;
+    /* Other styling for the button */
+}
+
+.sidebar-logo {
+    height: 180px; /* Adjust to the size that looks good for your layout */
+    width: auto; /* Keep the width automatic to maintain aspect ratio */
+    margin-right: 15px; /* Adjust space between logo and the title */
+    padding-left: 30px;
+}

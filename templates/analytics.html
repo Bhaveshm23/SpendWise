@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Header Row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Analytics Dashboard</h1>
+                
+            </div>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <!-- <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Percentage Increase Last Month</div> -->
+                            <div id="spendingGrowthLabel" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                <!-- Label will be updated by JavaScript -->
+                            </div>                            
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ percentage_increase_last_month | round(2) }}%</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Transaction Amount</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ total_amount_sum }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Amount Spent This Month</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ total_amount_current_month }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-wallet fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="charts-container">
+        <div class="chart">
+            <h5 class="text-center chart-title">Line Graph of Last 30 Days Spending</h5>
+            <canvas id="lineChart"></canvas>
+        </div>
+        
+        <div class="chart">
+            <h5 class="text-center chart-title">Line Graph of Last 12 Months Spending</h5>
+            <canvas id="lineChart12Months"></canvas>
+        </div>
+        
+        <div class="chart">
+            <h5 class="text-center chart-title">Pie Chart Data of All Transactions from Beginning</h5>
+            <canvas id="pieChart"></canvas>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    var primaryColor = 'rgba(74, 217, 217, 0.8)';  // Teal, complementary to the sidebar
+    var secondaryColor = 'rgba(255, 193, 7, 0.8)';  // Amber, for highlighting
+    var successColor = 'rgba(76, 175, 80, 0.8)';    // Green, from your button
+    var infoColor = 'rgba(3, 169, 244, 0.8)';       // Light Blue, for contrast
+    var warningColor = 'rgba(255, 152, 0, 0.8)';    // Orange, for attention
+    var dangerColor = 'rgba(244, 67, 54, 0.8)';     // Red, from your button hover
+
+    var pieChartColors = [
+        primaryColor,
+        secondaryColor,
+        successColor,
+        infoColor,
+        warningColor,
+        dangerColor,
+];
+
+    // Access the line chart data passed from Flask for last 30 days
+    var lineChartData = {{ line_chart_data_30_days | tojson | safe }};
+
+    // Initialize the line chart for last 30 days
+    var ctx = document.getElementById('lineChart').getContext('2d');
+    var lineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: lineChartData.labels,
+            datasets: [{
+                label: 'Total Amount',
+                data: lineChartData.data,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        unit: 'day'
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    // Access the line chart data passed from Flask for last 12 months
+    var lineChartData12Months = {{ line_chart_data_12_months | tojson | safe }};
+
+    // Initialize the line chart for last 12 months
+    var ctx12Months = document.getElementById('lineChart12Months').getContext('2d');
+    var lineChart12Months = new Chart(ctx12Months, {
+        type: 'line',
+        data: {
+            labels: lineChartData12Months.labels,
+            datasets: [{
+                label: 'Total Amount',
+                data: lineChartData12Months.data,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        unit: 'month'
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    // Access the pie chart data passed from Flask
+    var pieChartData = {{ pie_chart_data | tojson | safe }};
+
+    // Initialize the pie chart
+    var pieCtx = document.getElementById('pieChart').getContext('2d');
+    var pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: pieChartData.map(entry => entry.category),
+            datasets: [{
+                data: pieChartData.map(entry => entry.totalAmount),
+                backgroundColor: pieChartColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'right'
+            }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    var spendingGrowthLabel = document.getElementById('spendingGrowthLabel');
+    
+    // Get the last two months
+    var today = new Date();
+    var lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+    var monthBeforeLast = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+
+    // Month names array
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December"];
+
+    // Set the label
+    spendingGrowthLabel.textContent = "Percentage Increase in " + 
+                                      monthNames[lastMonth.getMonth()] + 
+                                      " (Last Month) vs " + 
+                                      monthNames[monthBeforeLast.getMonth()];
+    });
+
+
+</script>
+
+{% endblock %}
