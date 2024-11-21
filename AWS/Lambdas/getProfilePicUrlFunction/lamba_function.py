@@ -4,7 +4,7 @@ from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
     s3_client = boto3.client('s3')
-    bucket_name = ''
+    bucket_name = 'finance-user-image-2024'
 
     # Extract `user_id` from pathParameters
     user_id = event.get('pathParameters', {}).get('user_id')
@@ -18,11 +18,19 @@ def lambda_handler(event, context):
     for ext in file_extensions:
         object_key = f'user_profiles/{user_id}.{ext}'
         try:
+            # Check if the object exists
             s3_client.head_object(Bucket=bucket_name, Key=object_key)
-            image_url = f'https://{bucket_name}.s3.us-east-1.amazonaws.com/{object_key}'
+
+            # Generate a pre-signed URL
+            url = s3_client.generate_presigned_url(
+                'get_object',
+                Params={'Bucket': bucket_name, 'Key': object_key},
+                ExpiresIn=3600  # URL expires in 1 hour
+            )
+
             return {
                 'statusCode': 200,
-                'body': json.dumps({'exists': True, 'url': image_url})
+                'body': json.dumps({'exists': True, 'url': url})
             }
         except ClientError:
             continue
