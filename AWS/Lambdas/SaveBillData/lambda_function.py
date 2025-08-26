@@ -18,6 +18,7 @@ def lambda_handler(event, context):
     category = data['category']
     s3_url = data['s3_url']
 
+    print(user_id, timestamp, date, total_amount, category, s3_url)
     # Save data to DynamoDB
     table.put_item(Item={
         'user_id': user_id,

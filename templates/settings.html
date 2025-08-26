@@ -68,10 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const photoInput = document.getElementById('photoUpload');
     const profilePhoto = document.getElementById('profilePhoto');
     const saveChangesBtn = document.getElementById('saveChangesBtn');
-    const userName = '{{ user_id }}';
+    const userId = '{{ user_id }}';
+    console.log(userId);
+    
 
     // Fetch existing profile picture
-    fetch(`/getUserProfilePic/${userName}`)
+    fetch(`/getUserProfilePic/${userId}`)
     .then(response => response.json())
     .then(data => {
         if (data.exists) {
@@ -109,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const contentType = file.type;
             
             const payload = JSON.stringify({
-                user_name: userName,
+                user_id: userId,
                 image_data: imageData,
                 content_type: contentType
             });

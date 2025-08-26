@@ -22,7 +22,6 @@
                         <div class="col mr-2">
                             <!-- <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Percentage Increase Last Month</div> -->
                             <div id="spendingGrowthLabel" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                <!-- Label will be updated by JavaScript -->
                             </div>                            
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ percentage_increase_last_month | round(2) }}%</div>
                         </div>
@@ -81,6 +80,31 @@
             <canvas id="pieChart"></canvas>
         </div>
         
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-12">
+            <h3>Financial Recommendations</h3>
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Personalized Budgeting Tips</h6>
+                </div>
+                <div class="card-body">
+                    {% if recommendations %}
+                        <div class="list-group">
+                            {% for rec in recommendations %}
+                                <div class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="fas fa-lightbulb text-primary mr-3"></i>
+                                    <span>{{ rec }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No recommendations available. Add more transactions to get personalized advice.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
