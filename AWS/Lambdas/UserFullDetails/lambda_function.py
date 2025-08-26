@@ -16,46 +16,43 @@ def lambda_handler(event, context):
     print("Received event:", event)
     print("Full Event Object: ", json.dumps(event))
 
-    
-    # Initialize DynamoDB resource
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('UserBills')  # Your DynamoDB table name
+    table = dynamodb.Table('UserBills')
 
-    # Extract user_id from query parameters
-    if 'queryStringParameters' in event and event['queryStringParameters']:
-        user_id = event['queryStringParameters'].get('user_id')
-        if not user_id:
-            return {
-                'statusCode': 400,
-                'body': json.dumps('user_id is missing in the query string')
-            }
-    else:
+    if 'queryStringParameters' not in event or not event['queryStringParameters']:
         return {
             'statusCode': 400,
-            'body': json.dumps('Query parameters missing')
+            'body': json.dumps('Query parameters missing'),
+            'headers': {'Content-Type': 'application/json'}
         }
 
-    # Query DynamoDB to get the last 10 items for the user
+    user_id = event['queryStringParameters'].get('user_id')
+    if not user_id:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('user_id is missing in the query string'),
+            'headers': {'Content-Type': 'application/json'}
+        }
+
     try:
         response = table.query(
             KeyConditionExpression=Key('user_id').eq(user_id),
-            ScanIndexForward=False,  # Set to False for descending order (to get the latest first)
+            ScanIndexForward=False,
+            Limit=10
         )
 
-        # Extract the last 10 items
         last_10_items = response.get('Items', [])
 
-        # Prepare the response using the custom encoder
-        response_body = {
+        return {
             'statusCode': 200,
-            'body': json.dumps(last_10_items, cls=DecimalEncoder)
+            'body': json.dumps(last_10_items, cls=DecimalEncoder),
+            'headers': {'Content-Type': 'application/json'}
         }
-
-        return response_body
 
     except Exception as e:
         print(f"Error querying DynamoDB: {e}")
         return {
             'statusCode': 500,
-            'body': json.dumps('Internal Server Error')
+            'body': json.dumps('Internal Server Error'),
+            'headers': {'Content-Type': 'application/json'}
         }

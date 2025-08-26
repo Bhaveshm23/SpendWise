@@ -153,7 +153,7 @@
                 <div class="form-group">
                     <label for="billImageUpload">Select Bill Image</label>
                     <input type="file" id="billImageUpload" name="file" accept="image/*">
-                    <button type="button" id="uploadAutofillBtn" disabled>Upload Bill</button>
+                    <button type="button" id="uploadAutofillBtn" disabled>Upload & Autofill Bill</button>
                 </div>
 
                 <hr class="section-separator">
@@ -205,6 +205,9 @@
                         <div id="autofillSpinner" style="display: none;">
                             <img class="spinner-img" src="{{ url_for('static', filename='css/images/loading.gif') }}" alt="Autofilling...">
                         </div>
+                        <div id="autofilledTick" style="display: none;">
+                            <img class="tick-img" src="{{ url_for('static', filename='css/images/tick.jpg') }}" alt="Autofilled">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -236,7 +239,11 @@
             document.getElementById('date').value = '';
             document.getElementById('totalAmount').value = '';
             document.getElementById('category').value = '';
-            checkFields();
+            document.getElementById('selectedImage').style.display = 'none';
+            document.getElementById('uploadAutofillBtn').disabled = true;
+            document.getElementById('saveBtn').disabled = true;
+            uploadedFileUrl = '';
+            resetStatus();
         });
 
         document.getElementById('billImageUpload').addEventListener('change', function() {
@@ -258,12 +265,24 @@
             }
         });
 
+        function resetStatus() {
+            document.getElementById('uploadingText').style.display = 'none';
+            document.getElementById('uploadSpinner').style.display = 'none';
+            document.getElementById('uploadedTick').style.display = 'none';
+            document.getElementById('autofillingText').style.display = 'none';
+            document.getElementById('autofillSpinner').style.display = 'none';
+            document.getElementById('autofilledTick').style.display = 'none';
+        }   
+
         document.getElementById('uploadAutofillBtn').addEventListener('click', function() {
             var fileInput = document.getElementById('billImageUpload');
+            var userId = '{{ user_id }}';
             var uploadingText = document.getElementById('uploadingText');
             var uploadSpinner = document.getElementById('uploadSpinner');
             var uploadedTick = document.getElementById('uploadedTick');
-            var userId = '{{ user_id }}';
+            var autofillingText = document.getElementById('autofillingText');
+            var autofillSpinner = document.getElementById('autofillSpinner');
+            var autofilledTick = document.getElementById('autofilledTick');
           
             if (fileInput.files.length > 0) {
                 uploadingText.style.display = 'block';
@@ -279,7 +298,7 @@
                         user_id: userId,
                         filename: file.name,
                         body: fileContentBase64,
-                        bucket_name: 'bill-data-bucket-2024'  
+                        bucket_name: ''  //your bill bucket name
                     });
 
                     fetch('/upload', {
@@ -289,12 +308,44 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
+                        console.log("Upload data message",data.message);
                         if (data.message === 'File uploaded successfully') {
                             uploadedFileUrl = data.s3_url;
                             console.log("File URL:" + uploadedFileUrl);
                             uploadSpinner.style.display = 'none';
                             uploadedTick.style.display = 'block';
+
+                            //Autofill bill
+
+                            autofillingText.style.display = 'block';
+                            autofillSpinner.style.display = 'block';
+
+                            fetch('/processBill', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({s3_url: uploadedFileUrl, user_id: userId})
+
+                            })
+                            .then(response => response.json())
+                            .then(data =>{
+                                if(data.success){
+                                    document.getElementById('date').value = data.date || '';
+                                    document.getElementById('totalAmount').value = data.totalAmount || '';
+                                    document.getElementById('category').value = data.category || '';
+                                    autofillSpinner.style.display = 'none';
+                                    autofilledTick.style.display = 'block';
+                                    checkFields(); // Enabling the  save button if fields are filled
+                                }else {
+                                    throw new Error(data.error || 'Autofill failed');
+                                }
+                            })
+                            .catch(error => {
+                            console.error('Autofill Error:', error);
+                            alert(error.message);
+                            autofillSpinner.style.display = 'none';
+                            autofillingText.style.display = 'none';
+                        });
+
                         } else {
                             throw new Error('File upload failed');
                         }

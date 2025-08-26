@@ -4,14 +4,12 @@ info:
   version: "2024-11-18T03:34:17Z"
   title: "FinancialMgtAPI"
 host: ""
-basePath: "/test"
+basePath: "/Prod"
 schemes:
 - "https"
 paths:
   /export:
     options:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -43,8 +41,6 @@ paths:
             Access-Control-Allow-Headers:
               type: "string"
     options:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -61,8 +57,6 @@ paths:
               type: "string"
   /getProfilePicUrl:
     options:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -92,8 +86,6 @@ paths:
           schema:
             $ref: "#/definitions/Empty"
     options:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -115,8 +107,6 @@ paths:
               type: "string"
   /home/UserFullDetailsApi:
     get:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -125,8 +115,6 @@ paths:
           schema:
             $ref: "#/definitions/Empty"
     options:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -141,10 +129,25 @@ paths:
               type: "string"
             Access-Control-Allow-Headers:
               type: "string"
+  /home/advisor:
+    post:
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+    options:
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
   /home/lasttendays:
     get:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -158,8 +161,6 @@ paths:
           schema:
             $ref: "#/definitions/Empty"
     options:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -183,9 +184,10 @@ paths:
           description: "200 response"
           schema:
             $ref: "#/definitions/Empty"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
     options:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -202,8 +204,6 @@ paths:
               type: "string"
   /upload:
     post:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -212,8 +212,6 @@ paths:
           schema:
             $ref: "#/definitions/Empty"
     options:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -228,10 +226,8 @@ paths:
               type: "string"
             Access-Control-Allow-Headers:
               type: "string"
-  /uploadImage:
+  /upload/processBill:
     post:
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
@@ -240,8 +236,23 @@ paths:
           schema:
             $ref: "#/definitions/Empty"
     options:
-      consumes:
+      produces:
       - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+  /uploadImage:
+    post:
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+    options:
       produces:
       - "application/json"
       responses:
