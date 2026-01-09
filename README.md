@@ -11,10 +11,14 @@ SpendWise is a cloud-based personal finance management platform that empowers us
 - **Bill Upload & Storage**: 
   - Effortlessly upload bills as images or input transaction details directly.
   - Files are securely stored in AWS S3.
+- **Automatic Bill Data Extraction**:
+  - Uses AWS Textract to analyze uploaded bill images, automatically extracting and filling details such as date, total amount, and category for seamless form population
 - **Expense Analysis**: Provides insights such as:
   - Expenditure over the last 30 days.
   - Yearly spending trends.
   - Category-wise distribution of expenses
+- **AI-Powered Spending Advisor**:
+  - Leverages AWS Bedrock to generate personalized financial suggestions and recommendations based on aggregated spending patterns from user transactions.
 - **Report Generation**: Receive detailed expense reports via email using Amazon SES.
 - **Home Page Dashboard**: View all bill details and summaries on a user-friendly dashboard.
 - **Scalability & Security**: Built using AWS Lambda, API Gateway, DynamoDB, and other serverless services for high availability, scalability, and robust security.
@@ -39,6 +43,8 @@ SpendWise is a cloud-based personal finance management platform that empowers us
    - **DynamoDB**: Stores user and bill data.
    - **S3**: Stores uploaded bill images and profile pictures.
    - **SES**: Sends financial reports to users.
+   - **Amazon Textract**: Analyzes bill images to extract text and data for auto-filling.
+   - **Amazon Bedrock**: Provides AI runtime for generating spending suggestions using large language models.
 
 ---
 
@@ -46,7 +52,7 @@ SpendWise is a cloud-based personal finance management platform that empowers us
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/tanmayr71/SpendWise.git
+git clone https://github.com/Bhaveshm23/SpendWise
 cd SpendWise
 ```
 
@@ -110,6 +116,15 @@ http://localhost:5001
    - Validate token generation
    - Test user registration flow
    - Check permission handling
+     
+3. **BillAutoFill Lambda**
+   - Test image upload to S3 and invocation.
+   - Verify Textract text detection and extraction of date, amount, and category using sample bill images.
+
+4. **AI-Advisor Lambda**
+  - Test Bedrock model invocation with generated prompt.
+  - Query DynamoDB for user transactions
+
 
 ### Sample Test Event
 ```json
@@ -131,6 +146,8 @@ http://localhost:5001
 - `/savebill`
 - `/home/`
 - `/export/daterange`
+- `/home/advisor (for AI suggestions)`
+- `/upload/processBill (for bill auto-fill)`
 
 ### Test Cases
 1. **Successful Requests**
@@ -146,13 +163,10 @@ http://localhost:5001
 
 ## Monitoring and Logging
 - Use CloudWatch for lambda function logs
-- Set up detailed error tracking
 - Monitor API Gateway request/response cycles
-
 
 
 ### Future Roadmap
 
 - Implement machine learning for spending predictions
 - Enhanced data visualization
-- Allow users to update their profile
