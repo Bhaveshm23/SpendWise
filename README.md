@@ -26,7 +26,7 @@ SpendWise is a cloud-based personal finance management platform that empowers us
 ---
 
 ## Architecture
-<img width="989" alt="Screenshot 2024-11-20 at 9 04 17 PM" src="https://github.com/user-attachments/assets/6c6d640a-8362-4212-9982-ff1aa0f6969e">
+<img width="996" height="774" alt="Screenshot 2026-01-08 at 10 39 18 PM" src="https://github.com/user-attachments/assets/281add08-8ffe-4c46-bcf8-13ac3b4d3e20" />
 
 ### High-Level Diagram
 
